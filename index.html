@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>كويز الميدتيرم — رياضة 1 | الأكاديمية السادات للعلوم الإدارية</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --red:#e11d48;--pink:#c026d3;--purple:#7c3aed;--deep:#3b0764;
+  --grad:linear-gradient(135deg,#e11d48 0%,#a21caf 55%,#6d28d9 100%);
+  --ink:#20123a;--muted:#6b6480;--line:#e8e0f7;--ok:#059669;--bad:#dc2626;--warn:#b45309;
+  --radius:18px;
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:#f7f4fd;color:var(--ink);line-height:1.85;direction:rtl;
+  font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic","Traditional Arabic",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.bg-orbs{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+.bg-orbs span{position:absolute;border-radius:50%;filter:blur(70px);opacity:.30}
+.bg-orbs span:nth-child(1){width:380px;height:380px;background:#f43f5e;top:-130px;right:-90px}
+.bg-orbs span:nth-child(2){width:430px;height:430px;background:#a855f7;bottom:-170px;left:-130px}
+.bg-orbs span:nth-child(3){width:240px;height:240px;background:#ec4899;top:42%;left:48%}
+.screen{display:none;position:relative;z-index:1}
+.screen.active{display:block}
+.wrap{max-width:1000px;margin:0 auto;padding:18px 16px 40px}
+.eq{display:block;direction:ltr;text-align:center;font-family:"Cambria Math","Times New Roman",Georgia,serif;
+  font-size:1.18rem;background:#fbf8ff;border:1px dashed #d9c9f7;border-radius:12px;
+  padding:10px 14px;margin:10px 0;letter-spacing:.4px;overflow-x:auto;white-space:nowrap}
+.eq.sm{font-size:1.02rem;padding:7px 10px;margin:6px 0;display:inline-block}
+.btn{border:0;cursor:pointer;font:inherit;font-weight:700;border-radius:14px;padding:11px 22px;
+  transition:transform .15s ease,box-shadow .15s ease,opacity .15s}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 10px 24px rgba(124,58,237,.32)}
+.btn-primary:hover{box-shadow:0 14px 30px rgba(124,58,237,.42)}
+.btn-ghost{background:#fff;color:var(--purple);border:1.5px solid #dccdf8}
+.btn-ghost:hover{background:#f7f2ff}
+.btn-sm{padding:7px 14px;font-size:.86rem;border-radius:11px}
+.btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+.tiny{font-size:.8rem;color:var(--muted)}
+
+/* ---------- START ---------- */
+.start-wrap{max-width:880px;margin:0 auto;padding:46px 18px 60px;text-align:center}
+.brand{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);
+  border-radius:999px;padding:6px 16px;font-size:.85rem;color:var(--purple);font-weight:700;
+  box-shadow:0 6px 18px rgba(124,58,237,.10)}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--grad)}
+h1.title{font-size:clamp(1.7rem,4.6vw,2.6rem);margin:18px 0 6px;line-height:1.4}
+h1.title em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);max-width:640px;margin:0 auto 22px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0}
+.stat{background:#fff;border-radius:var(--radius);padding:16px 14px;border:1px solid var(--line);
+  box-shadow:0 8px 24px rgba(76,29,149,.07)}
+.stat b{display:block;font-size:1.6rem;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:.83rem;color:var(--muted)}
+.panel{background:#fff;border-radius:var(--radius);border:1px solid var(--line);padding:18px 20px;
+  text-align:right;box-shadow:0 10px 30px rgba(76,29,149,.08);margin:14px 0}
+.panel h3{margin:0 0 10px;font-size:1.02rem;color:var(--deep)}
+.panel ul{margin:0;padding-inline-start:20px}
+.panel li{margin:4px 0;font-size:.92rem}
+.topic-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pill{background:#f5efff;border:1px solid #e2d4fb;color:#5b21b6;border-radius:999px;padding:5px 13px;font-size:.82rem;font-weight:600}
+.nameRow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:20px 0 6px}
+.nameRow input{font:inherit;padding:12px 16px;border-radius:14px;border:1.5px solid #dccdf8;min-width:250px;text-align:center}
+.nameRow input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 4px #ede9fe}
+
+/* ---------- EXAM ---------- */
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  justify-content:space-between;background:var(--grad);color:#fff;padding:10px 18px;
+  box-shadow:0 8px 26px rgba(76,29,149,.28)}
+.tb-title{font-weight:800;font-size:1rem;line-height:1.4}
+.tb-sub{font-size:.76rem;opacity:.85}
+.tb-mid{flex:1 1 220px;min-width:170px}
+.progress{height:9px;background:rgba(255,255,255,.28);border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#fde68a,#fff);border-radius:999px;transition:width .3s}
+.progress-txt{font-size:.76rem;opacity:.9;margin-top:2px}
+.tb-left{display:flex;align-items:center;gap:8px}
+.timer{font-family:Consolas,monospace;font-weight:700;background:rgba(0,0,0,.22);padding:5px 12px;border-radius:10px;font-size:.95rem}
+.timer.low{background:#7f1d1d;animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.55}}
+.topbar .btn-ghost{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.4);padding:6px 12px;font-size:.8rem}
+.navgrid{position:sticky;top:56px;z-index:35;background:#fffdfa;border-bottom:1px solid var(--line);
+  display:flex;gap:7px;overflow-x:auto;padding:9px 14px;scrollbar-width:thin}
+.navbtn{flex:0 0 auto;width:36px;height:36px;border-radius:11px;border:1.5px solid #e3d8f9;background:#fff;
+  color:#5b21b6;font-weight:700;font-size:.85rem;cursor:pointer;transition:.15s}
+.navbtn:hover{background:#f6f1ff}
+.navbtn.done{background:linear-gradient(135deg,#a21caf,#7c3aed);color:#fff;border-color:transparent}
+.navbtn.cur{outline:3px solid #f0abfc;outline-offset:1px}
+.navbtn.wrong{background:#fee2e2;border-color:#fca5a5;color:#b91c1c}
+.navbtn.right{background:#d1fae5;border-color:#6ee7b7;color:#047857}
+.qcard{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:16px 0;
+  box-shadow:0 10px 30px rgba(76,29,149,.08);scroll-margin-top:130px}
+.qhead{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px dashed var(--line);margin-bottom:12px}
+.qnum{font-weight:800;color:var(--deep);font-size:1.02rem}
+.badge{border-radius:999px;padding:3px 11px;font-size:.75rem;font-weight:700}
+.badge.m{background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe}
+.badge.h{background:#fff1f2;color:#be123c;border:1px solid #fecdd3}
+.badge.topic{background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe}
+.badge.pts{margin-inline-start:auto;background:#f8fafc;color:#64748b;border:1px solid #e2e8f0}
+.qask{font-size:.95rem;color:#3f3555;margin:0 0 4px}
+.methods{margin:14px 0 6px}
+.methods .lbl{font-size:.82rem;color:var(--muted);margin-bottom:6px;display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid #e4d9fb;background:#fff;color:#5b21b6;border-radius:999px;padding:6px 14px;
+  font:inherit;font-size:.84rem;cursor:pointer;transition:.15s}
+.chip:hover{background:#f8f4ff}
+.chip.on{background:var(--grad);color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(124,58,237,.28)}
+.answer{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;align-items:center}
+.field{display:flex;align-items:center;gap:8px;background:#fbf9ff;border:1.5px solid #e6dcfb;border-radius:14px;padding:8px 12px}
+.field label{font-family:"Cambria Math","Times New Roman",serif;font-size:1rem;color:#4c1d95;font-weight:700;white-space:nowrap}
+.field input{font:inherit;font-family:"Cambria Math","Times New Roman",serif;font-size:1rem;border:0;background:transparent;
+  width:150px;text-align:center;direction:ltr;padding:4px 2px}
+.field input:focus{outline:none}
+.field:focus-within{border-color:var(--purple);box-shadow:0 0 0 4px #ede9fe;background:#fff}
+.workbox{margin-top:12px}
+.workbox summary{cursor:pointer;font-size:.84rem;color:var(--purple);font-weight:700}
+.workbox textarea{width:100%;margin-top:8px;font:inherit;font-size:.9rem;border:1.5px solid #e6dcfb;
+  border-radius:14px;padding:10px 12px;min-height:70px;resize:vertical;background:#fdfcff}
+.workbox textarea:focus{outline:none;border-color:var(--purple)}
+.endbar{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:22px 0 10px}
+.bottombar{position:sticky;bottom:0;z-index:36;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:9px 16px}
+.bb-count{font-size:.85rem;color:var(--muted);font-weight:700}
+@media(max-width:720px){
+  .field input{width:110px}
+  .navgrid{top:auto;position:static}
+  .tb-mid{order:3;flex-basis:100%}
+}
+
+/* ---------- RESULT ---------- */
+.hero{background:var(--grad);color:#fff;border-radius:24px;padding:26px 24px;display:flex;gap:26px;align-items:center;
+  flex-wrap:wrap;box-shadow:0 18px 44px rgba(76,29,149,.28);margin-top:10px}
+.ring{position:relative;width:158px;height:158px;flex:0 0 auto}
+.ring svg{transform:rotate(-90deg)}
+.ring .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .center b{font-size:2rem;line-height:1}
+.ring .center span{font-size:.75rem;opacity:.9}
+.hero-info{flex:1 1 260px}
+.hero-info h2{margin:0 0 6px;font-size:1.5rem}
+.hero-info .msg{background:rgba(255,255,255,.18);border-radius:14px;padding:10px 14px;font-size:.92rem;margin-top:10px}
+.metaRow{display:flex;gap:18px;flex-wrap:wrap;font-size:.86rem;opacity:.95;margin-top:10px}
+.topicbars{display:grid;gap:10px;margin:18px 0}
+.tbar{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;box-shadow:0 6px 18px rgba(76,29,149,.06)}
+.tbar .row{display:flex;justify-content:space-between;font-size:.88rem;font-weight:700;color:var(--deep)}
+.tbar .track{height:9px;background:#f1ecfb;border-radius:999px;margin-top:8px;overflow:hidden}
+.tbar .fill{height:100%;background:var(--grad);border-radius:999px}
+.review h2{font-size:1.15rem;margin:26px 0 6px}
+.rv{background:#fff;border:1px solid var(--line);border-left:6px solid var(--line);border-radius:16px;padding:16px 18px;margin:12px 0;
+  box-shadow:0 8px 24px rgba(76,29,149,.07)}
+.rv.ok{border-left-color:var(--ok)}
+.rv.no{border-left-color:var(--bad)}
+.rv .rhead{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-weight:800;font-size:.8rem;border-radius:999px;padding:3px 11px}
+.tag.ok{background:#d1fae5;color:#047857}
+.tag.no{background:#fee2e2;color:#b91c1c}
+.ua{display:flex;flex-wrap:wrap;gap:8px;font-size:.9rem;margin:8px 0}
+.ua .box{background:#fbf9ff;border:1px solid #e6dcfb;border-radius:10px;padding:4px 12px;font-family:"Cambria Math","Times New Roman",serif;direction:ltr}
+.ca{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:6px 12px;display:inline-block;font-family:"Cambria Math","Times New Roman",serif;direction:ltr}
+.sol{background:#faf7ff;border:1px dashed #d9c9f7;border-radius:14px;padding:12px 16px;margin-top:10px}
+.sol .solh{font-weight:800;color:var(--deep);font-size:.88rem;margin:0 0 6px}
+.steps{margin:0;padding-inline-start:20px}
+.steps li{margin:5px 0;font-size:.9rem;color:#3f3555}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-inline-end:5px;vertical-align:-1px}
+@media print{
+  .screen#screen-exam,.bottombar,.topbar,.navgrid,.endbar{display:none!important}
+  .bg-orbs{display:none}
+  .rv{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<!-- ===================== شاشة البداية ===================== -->
+<section id="screen-start" class="screen active">
+  <div class="start-wrap">
+    <div class="brand"><span class="dot"></span> رياضة 1 — الأكاديمية السادات للعلوم الإدارية</div>
+    <h1 class="title">كويز الميدتيرم <em>الشامل</em></h1>
+    <p class="lead">كويز على شكل امتحان ميدتيرم في الفصلين الأول والثاني: معادلات الدرجة الأولى، معادلتان في مجهولين (تعويض وحذف)، معادلة الدرجة الثانية، والمحددات بطريقة كرامر وساروس.</p>
+
+    <div class="stat-grid">
+      <div class="stat"><b>25</b><span>سؤالًا في الامتحان</span></div>
+      <div class="stat"><b>15</b><span>سؤال مستوى متوسط</span></div>
+      <div class="stat"><b>10</b><span>أسئلة مستوى صعب (مش أوي)</span></div>
+      <div class="stat"><b>75</b><span>دقيقة زمن مقترح</span></div>
+    </div>
+
+    <div class="panel">
+      <h3>محتوى الامتحان</h3>
+      <div class="topic-pills">
+        <span class="pill">معادلة من الدرجة الأولى في مجهول واحد</span>
+        <span class="pill">معادلتان في مجهولين (تعويض وحذف)</span>
+        <span class="pill">معادلة من الدرجة الثانية (تحليل / القانون العام)</span>
+        <span class="pill">محددات كاملة (2×2 و 3×3)</span>
+        <span class="pill">طريقة كرامر</span>
+        <span class="pill">طريقة ساروس والمرفقات</span>
+        <span class="pill">تطبيقات إدارية على المحددات</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>طريقة الامتحان والتصحيح</h3>
+      <ul>
+        <li>لكل سؤال <b>درجة واحدة</b>، والدرجة النهائية من 25.</li>
+        <li><b>الطريقة اختيارية</b>: اختار طريقة الحل التي تفضلها (تعويض / حذف / كرامر / التحليل / القانون العام)، واختيارك لا يؤثر على الدرجة.</li>
+        <li><b>التصحيح ذكي ومرن</b>: تُقبل الإجابة بأي صيغة صحيحة — كسر عادي مثل <span dir="ltr">22/5</span> أو عشري <span dir="ltr">4.4</span>، وكتابة المتغير مع الإجابة، والأرقام العربية، والتقريب لخانتين عشريتين، وترتيب الجذور غير مهم.</li>
+        <li>يمكنك كتابة <span dir="ltr">2+sqrt(5)</span> أو <span dir="ltr">√5+2</span> أو <span dir="ltr">2+√5</span> وسيحسبها المصحح.</li>
+        <li>بعد التسليم ستظهر لك <b>الإجابة الصحيحة وخطوات الحل كاملة</b> لكل سؤال.</li>
+      </ul>
+    </div>
+
+    <div class="nameRow">
+      <input id="studentName" type="text" placeholder="اكتب اسمك (اختياري)" autocomplete="off">
+    </div>
+    <button class="btn btn-primary" id="btnStart">ابدأ الامتحان الآن</button>
+    <p class="tiny" style="margin-top:14px">الامتحان يحفظ إجاباتك تلقائيًا في المتصفح، فلو أغلقت الصفحة يمكنك المتابعة من حيث توقفت.</p>
+  </div>
+</section>
+
+<!-- ===================== شاشة الامتحان ===================== -->
+<section id="screen-exam" class="screen">
+  <header class="topbar">
+    <div>
+      <div class="tb-title">كويز الميدتيرم — رياضة 1</div>
+      <div class="tb-sub" id="studentLabel">رياضة 1 · الفصل الأول والثاني</div>
+    </div>
+    <div class="tb-mid">
+      <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-txt" id="progressTxt">0 / 25 سؤالًا تمت الإجابة عنه</div>
+    </div>
+    <div class="tb-left">
+      <div class="timer" id="timer">75:00</div>
+      <button class="btn btn-ghost" id="btnToggleTimer">إخفاء المؤقت</button>
+      <button class="btn btn-ghost" id="btnSubmit" style="background:#fff;color:#7c3aed">تسليم</button>
+    </div>
+  </header>
+
+  <nav class="navgrid" id="navgrid" aria-label="التنقل بين الأسئلة"></nav>
+
+  <main class="wrap">
+    <div id="questions"></div>
+    <div class="endbar">
+      <button class="btn btn-primary" id="btnSubmitBottom">تسليم الامتحان وعرض التصحيح</button>
+    </div>
+  </main>
+
+  <div class="bottombar">
+    <button class="btn btn-ghost btn-sm" id="btnPrev">السابق</button>
+    <span class="bb-count" id="bbCount">سؤال 1 من 25</span>
+    <button class="btn btn-ghost btn-sm" id="btnNext">التالي</button>
+  </div>
+</section>
+
+<!-- ===================== شاشة النتيجة ===================== -->
+<section id="screen-result" class="screen">
+  <div class="wrap">
+    <div class="hero">
+      <div class="ring">
+        <svg width="158" height="158" viewBox="0 0 158 158">
+          <circle cx="79" cy="79" r="66" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="14"></circle>
+          <circle id="ringFill" cx="79" cy="79" r="66" fill="none" stroke="#fde68a" stroke-width="14"
+                  stroke-linecap="round" stroke-dasharray="414.7" stroke-dashoffset="414.7"></circle>
+        </svg>
+        <div class="center"><b id="scoreBig">0</b><span id="scoreOut">من 25</span></div>
+      </div>
+      <div class="hero-info">
+        <h2 id="heroTitle">نتيجتك</h2>
+        <div class="metaRow">
+          <span>الاسم: <b id="resName">—</b></span>
+          <span>النسبة: <b id="resPct">0%</b></span>
+          <span>الزمن المستغرق: <b id="resTime">—</b></span>
+        </div>
+        <div class="msg" id="resMsg"></div>
+      </div>
+    </div>
+
+    <div class="topicbars" id="topicBars"></div>
+
+    <div class="legend">
+      <span><i style="background:#d1fae5"></i>إجابة صحيحة</span>
+      <span><i style="background:#fee2e2"></i>إجابة خاطئة أو غير مكتملة</span>
+      <span><i style="background:#f1ecfb"></i>لم تتم الإجابة</span>
+    </div>
+
+    <div class="review" id="review"></div>
+
+    <div class="endbar">
+      <button class="btn btn-primary" id="btnRetry">إعادة الامتحان من جديد</button>
+      <button class="btn btn-ghost" id="btnShowAllErrors">مراجعة الأسئلة الخطأ فقط</button>
+      <button class="btn btn-ghost" id="btnPrint">طباعة / حفظ PDF</button>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ============================================================
+   كويز الميدتيرم — رياضة 1 (الأكاديمية السادات للعلوم الإدارية)
+   ملف واحد مستقل: لا يحتاج إنترنت ولا مكتبات خارجية
+   ============================================================ */
+
+var QUESTIONS = [];
+function Q(q){ QUESTIONS.push(q); }
+
+
+/* ======================= الباب الأول: معادلة من الدرجة الأولى ======================= */
+
+Q({
+  id:1, topic:'first', level:'medium',
+  ask:'حل المعادلة من الدرجة الأولى (أوجد قيمة x):',
+  eq:'3(x + 6) = 2(x + 3) + 4',
+  methods:['فك الأقواس ثم النقل','تجميع الحدود المتشابهة أولًا'],
+  fields:[{key:'x', label:'x ='}],
+  ans:[-8],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>نفك الأقواس: <span class="eq sm">3x + 18 = 2x + 6 + 4</span></li>'+
+      '<li>نجمع الحدود المتشابهة في الطرف الأيمن: <span class="eq sm">3x + 18 = 2x + 10</span></li>'+
+      '<li>ننقل حدود x إلى طرف والأعداد إلى الطرف الآخر: <span class="eq sm">3x - 2x = 10 - 18</span></li>'+
+      '<li>إذن: <span class="eq sm">x = -8</span></li></ol>'
+});
+
+Q({
+  id:2, topic:'first', level:'medium',
+  ask:'حل المعادلة من الدرجة الأولى:',
+  eq:'5x - 3 = 2x + 12',
+  methods:['نقل الحدود','القسمة على معامل x'],
+  fields:[{key:'x', label:'x ='}],
+  ans:[5],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>ننقل حدود x إلى اليمين والأعداد إلى اليسار: <span class="eq sm">5x - 2x = 12 + 3</span></li>'+
+      '<li><span class="eq sm">3x = 15</span></li>'+
+      '<li>نقسم الطرفين على 3: <span class="eq sm">x = 5</span></li></ol>'
+});
+
+Q({
+  id:3, topic:'first', level:'medium',
+  ask:'حل المعادلة (معاملاتها عشرية):',
+  eq:'0.4x + 3 = 0.6x - 1',
+  methods:['الضرب في 10 للتخلص من العشرية','النقل المباشر للحدود'],
+  fields:[{key:'x', label:'x ='}],
+  ans:[20],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>نضرب الطرفين في 10 للتخلص من العلامة العشرية: <span class="eq sm">4x + 30 = 6x - 10</span></li>'+
+      '<li>ننقل الحدود: <span class="eq sm">30 + 10 = 6x - 4x</span> أي <span class="eq sm">40 = 2x</span></li>'+
+      '<li>إذن <span class="eq sm">x = 20</span></li>'+
+      '<li>وبدون الضرب في 10: <span class="eq sm">0.4x - 0.6x = -1 - 3</span> أي <span class="eq sm">-0.2x = -4</span> ومنها x = 20</li></ol>'
+});
+
+Q({
+  id:4, topic:'first', level:'hard',
+  ask:'حل المعادلة من الدرجة الأولى:',
+  eq:'4(2x - 3) - 3(x + 5) = 2(x - 4) + 5',
+  methods:['فك الأقواس ثم النقل','التخلص من الحدود المتشابهة'],
+  fields:[{key:'x', label:'x ='}],
+  ans:[8],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>نفك الأقواس في الطرفين: <span class="eq sm">8x - 12 - 3x - 15 = 2x - 8 + 5</span></li>'+
+      '<li>نجمع الحدود المتشابهة: <span class="eq sm">5x - 27 = 2x - 3</span></li>'+
+      '<li>ننقل الحدود: <span class="eq sm">5x - 2x = -3 + 27</span> أي <span class="eq sm">3x = 24</span></li>'+
+      '<li>إذن <span class="eq sm">x = 8</span></li></ol>'
+});
+
+Q({
+  id:5, topic:'first', level:'hard',
+  ask:'حل المعادلة ذات المقامات (اكتب الناتج كسرًا أو عشريًا):',
+  eq:'(2x - 1)/3 - (x + 2)/4 = 1',
+  methods:['ضرب الطرفين في م.م.أ = 12','توحيد المقامات'],
+  fields:[{key:'x', label:'x ='}],
+  ans:[4.4],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>المضاعف المشترك الأصغر للمقامين 3 و 4 هو 12، نضرب الطرفين في 12.</li>'+
+      '<li><span class="eq sm">4(2x - 1) - 3(x + 2) = 12</span></li>'+
+      '<li>نفك الأقواس: <span class="eq sm">8x - 4 - 3x - 6 = 12</span></li>'+
+      '<li><span class="eq sm">5x - 10 = 12</span> ثم <span class="eq sm">5x = 22</span></li>'+
+      '<li>إذن <span class="eq sm">x = 22/5 = 4.4</span></li></ol>'
+});
+
+/* ======================= معادلتان في مجهولين (تعويض وحذف) ======================= */
+
+Q({
+  id:6, topic:'system2', level:'medium',
+  ask:'حل النظام بطريقة التعويض أو الحذف (أوجد x و y):',
+  eq:'x + y = 13      ,      x - y = 5',
+  methods:['التعويض','الحذف بالجمع','طريقة كرامر'],
+  fields:[{key:'x', label:'x ='},{key:'y', label:'y ='}],
+  ans:[9,4],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li><b>بالتعويض:</b> من المعادلة الأولى <span class="eq sm">x = 13 - y</span></li>'+
+      '<li>نعوض في الثانية: <span class="eq sm">(13 - y) - y = 5</span> أي <span class="eq sm">13 - 2y = 5</span></li>'+
+      '<li><span class="eq sm">2y = 8</span> إذن <span class="eq sm">y = 4</span> ومنها <span class="eq sm">x = 13 - 4 = 9</span></li>'+
+      '<li><b>وبالحذف:</b> بجمع المعادلتين يختفي y: <span class="eq sm">2x = 18</span> إذن <span class="eq sm">x = 9</span> ثم من الأولى <span class="eq sm">y = 13 - 9 = 4</span></li>'+
+      '<li><b>بكرامر:</b> Δ = (1)(-1) - (1)(1) = -2، Δx = (13)(-1) - (1)(5) = -18، Δy = (1)(5) - (13)(1) = -8 → x = 9 و y = 4</li>'+
+      '<li>الحل: <span class="eq sm">(x , y) = (9 , 4)</span></li></ol>'
+});
+
+Q({
+  id:7, topic:'system2', level:'medium',
+  ask:'حل النظام (أوجد x و y):',
+  eq:'y = 3x - 2      ,      2x + y = 13',
+  methods:['التعويض المباشر','الحذف بعد ترتيب المعادلتين','طريقة كرامر'],
+  fields:[{key:'x', label:'x ='},{key:'y', label:'y ='}],
+  ans:[3,7],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li><b>بالتعويض المباشر:</b> المعادلة الأولى معطاة بدلالة x، نعوض في الثانية.</li>'+
+      '<li><span class="eq sm">2x + (3x - 2) = 13</span> أي <span class="eq sm">5x - 2 = 13</span></li>'+
+      '<li><span class="eq sm">5x = 15</span> إذن <span class="eq sm">x = 3</span></li>'+
+      '<li>ثم <span class="eq sm">y = 3(3) - 2 = 7</span></li>'+
+      '<li>الحل: <span class="eq sm">(x , y) = (3 , 7)</span></li></ol>'
+});
+
+Q({
+  id:8, topic:'system2', level:'medium',
+  ask:'حل النظام (أوجد x و y):',
+  eq:'2x + 5y = 12      ,      3x + y = 5',
+  methods:['الحذف بالضرب والطرح','التعويض','طريقة كرامر'],
+  fields:[{key:'x', label:'x ='},{key:'y', label:'y ='}],
+  ans:[1,2],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li><b>بالحذف:</b> نضرب المعادلة الثانية في 5: <span class="eq sm">15x + 5y = 25</span></li>'+
+      '<li>نطرح المعادلة الأولى: <span class="eq sm">(15x + 5y) - (2x + 5y) = 25 - 12</span> أي <span class="eq sm">13x = 13</span></li>'+
+      '<li>إذن <span class="eq sm">x = 1</span>، ومن الثانية <span class="eq sm">y = 5 - 3(1) = 2</span></li>'+
+      '<li><b>وبالتعويض:</b> من الثانية <span class="eq sm">y = 5 - 3x</span> → <span class="eq sm">2x + 5(5 - 3x) = 12</span> → <span class="eq sm">-13x = -13</span> → x = 1 → y = 2</li>'+
+      '<li>الحل: <span class="eq sm">(x , y) = (1 , 2)</span></li></ol>'
+});
+
+Q({
+  id:9, topic:'system2', level:'medium',
+  ask:'حل النظام (المعادلتان بمقامات — أوجد x و y):',
+  eq:'x/3 + y/2 = 5      ,      x/2 + y/3 = 5',
+  methods:['ضرب كل معادلة في 6','الحذف بعد تبسيط المقامات'],
+  fields:[{key:'x', label:'x ='},{key:'y', label:'y ='}],
+  ans:[6,6],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>نضرب المعادلة الأولى في 6: <span class="eq sm">2x + 3y = 30</span></li>'+
+      '<li>نضرب المعادلة الثانية في 6: <span class="eq sm">3x + 2y = 30</span></li>'+
+      '<li>بطرح المعادلتين: <span class="eq sm">-x + y = 0</span> أي <span class="eq sm">y = x</span></li>'+
+      '<li>نعوض: <span class="eq sm">2x + 3x = 30</span> → <span class="eq sm">5x = 30</span> → <span class="eq sm">x = 6</span> و <span class="eq sm">y = 6</span></li>'+
+      '<li>الحل: <span class="eq sm">(x , y) = (6 , 6)</span></li></ol>'
+});
+
+Q({
+  id:10, topic:'system2', level:'hard',
+  ask:'حل النظام (أوجد x و y):',
+  eq:'3x + 2y = 16      ,      2x - 3y = -11',
+  methods:['الحذف بالضرب في معاملات متعاكسة','التعويض','طريقة كرامر'],
+  fields:[{key:'x', label:'x ='},{key:'y', label:'y ='}],
+  ans:[2,5],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li><b>بالحذف:</b> نضرب الأولى في 3: <span class="eq sm">9x + 6y = 48</span>، والثانية في 2: <span class="eq sm">4x - 6y = -22</span></li>'+
+      '<li>بالجمع يختفي y: <span class="eq sm">13x = 26</span> إذن <span class="eq sm">x = 2</span></li>'+
+      '<li>نعوض: <span class="eq sm">3(2) + 2y = 16</span> → <span class="eq sm">2y = 10</span> → <span class="eq sm">y = 5</span></li>'+
+      '<li><b>بكرامر:</b> Δ = (3)(-3) - (2)(2) = -13، Δx = (16)(-3) - (2)(-11) = -26 → x = 2، Δy = (3)(-11) - (16)(2) = -65 → y = 5</li>'+
+      '<li>الحل: <span class="eq sm">(x , y) = (2 , 5)</span></li></ol>'
+});
+
+Q({
+  id:11, topic:'system2', level:'hard',
+  ask:'حل النظام (أوجد x و y):',
+  eq:'4x + 5y = 32      ,      3x + 2y = 17',
+  methods:['الحذف بالضرب','التعويض','طريقة كرامر'],
+  fields:[{key:'x', label:'x ='},{key:'y', label:'y ='}],
+  ans:[3,4],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li><b>بالحذف:</b> الأولى × 2: <span class="eq sm">8x + 10y = 64</span>، الثانية × 5: <span class="eq sm">15x + 10y = 85</span></li>'+
+      '<li>بالطرح: <span class="eq sm">7x = 21</span> إذن <span class="eq sm">x = 3</span></li>'+
+      '<li>نعوض: <span class="eq sm">12 + 5y = 32</span> → <span class="eq sm">5y = 20</span> → <span class="eq sm">y = 4</span></li>'+
+      '<li><b>بكرامر:</b> Δ = (4)(2) - (5)(3) = -7، Δx = (32)(2) - (5)(17) = -21 → x = 3، Δy = (4)(17) - (32)(3) = -28 → y = 4</li>'+
+      '<li>الحل: <span class="eq sm">(x , y) = (3 , 4)</span></li></ol>'
+});
+
+/* ======================= الباب الأول: معادلة من الدرجة الثانية ======================= */
+
+Q({
+  id:12, topic:'quad', level:'medium',
+  ask:'حل المعادلة من الدرجة الثانية (اكتب الجذرين، والترتيب غير مهم):',
+  eq:'x^2 - 2x - 24 = 0',
+  methods:['التحليل (طريقة المفتاح)','القانون العام'],
+  fields:[{key:'r1', label:'x1 ='},{key:'r2', label:'x2 ='}],
+  ans:[6,-4], unordered:true,
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li><b>بالتحليل:</b> نبحث عن عددين حاصل ضربهما -24 ومجموعهما -2، وهما 4 و -6.</li>'+
+      '<li><span class="eq sm">(x - 6)(x + 4) = 0</span></li>'+
+      '<li>إذن <span class="eq sm">x = 6</span> أو <span class="eq sm">x = -4</span></li>'+
+      '<li><b>بالقانون العام:</b> <span class="eq sm">x = (-b ± √(b² - 4ac)) / 2a</span> مع a = 1، b = -2، c = -24</li>'+
+      '<li>Δ = 4 + 96 = 100 → <span class="eq sm">x = (2 ± 10) / 2</span> → x = 6 أو x = -4</li></ol>'
+});
+
+Q({
+  id:13, topic:'quad', level:'medium',
+  ask:'حل المعادلة من الدرجة الثانية (الترتيب غير مهم):',
+  eq:'x^2 - 3x - 10 = 0',
+  methods:['التحليل','القانون العام'],
+  fields:[{key:'r1', label:'x1 ='},{key:'r2', label:'x2 ='}],
+  ans:[5,-2], unordered:true,
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li><b>بالتحليل:</b> عددان حاصل ضربهما -10 ومجموعهما -3 وهما -5 و 2.</li>'+
+      '<li><span class="eq sm">(x - 5)(x + 2) = 0</span> → <span class="eq sm">x = 5</span> أو <span class="eq sm">x = -2</span></li>'+
+      '<li><b>بالقانون العام:</b> Δ = 9 + 40 = 49 → <span class="eq sm">x = (3 ± 7) / 2</span> → x = 5 أو x = -2</li></ol>'
+});
+
+Q({
+  id:14, topic:'quad', level:'medium',
+  ask:'حل المعادلة (لاحظ أن معامل x² لا يساوي 1):',
+  eq:'4x^2 - 8x + 3 = 0',
+  methods:['التحليل','القانون العام','إكمال المربع'],
+  fields:[{key:'r1', label:'x1 ='},{key:'r2', label:'x2 ='}],
+  ans:[1.5,0.5], unordered:true,
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li><b>بالقانون العام:</b> a = 4، b = -8، c = 3 → Δ = 64 - 48 = 16</li>'+
+      '<li><span class="eq sm">x = (8 ± 4) / 8</span> → <span class="eq sm">x = 12/8 = 3/2</span> أو <span class="eq sm">x = 4/8 = 1/2</span></li>'+
+      '<li><b>بالتحليل:</b> <span class="eq sm">(2x - 1)(2x - 3) = 0</span> → <span class="eq sm">x = 1/2</span> أو <span class="eq sm">x = 3/2</span></li></ol>'
+});
+
+Q({
+  id:15, topic:'quad', level:'medium',
+  ask:'حل المعادلة (انتبه: لا تقسم على x قبل التحليل):',
+  eq:'x^2 = 7x',
+  methods:['النقل إلى صيغة الصفر ثم التحليل','القانون العام'],
+  fields:[{key:'r1', label:'x1 ='},{key:'r2', label:'x2 ='}],
+  ans:[0,7], unordered:true,
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>ننقل كل الحدود إلى طرف واحد: <span class="eq sm">x^2 - 7x = 0</span></li>'+
+      '<li>نأخذ x عاملًا مشتركًا: <span class="eq sm">x(x - 7) = 0</span></li>'+
+      '<li>إذن <span class="eq sm">x = 0</span> أو <span class="eq sm">x = 7</span></li>'+
+      '<li>خطأ شائع: القسمة على x تعطي الحل x = 7 فقط وتُفقد قيمة x = 0</li></ol>'
+});
+
+Q({
+  id:16, topic:'quad', level:'hard',
+  ask:'حل المعادلة من الدرجة الثانية:',
+  eq:'3x^2 + 4x - 4 = 0',
+  methods:['القانون العام','التحليل'],
+  fields:[{key:'r1', label:'x1 ='},{key:'r2', label:'x2 ='}],
+  ans:[0.6666666667,-2], unordered:true,
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>a = 3، b = 4، c = -4 → <span class="eq sm">Δ = b² - 4ac = 16 + 48 = 64</span> (موجب أي للمعادلة جذران حقيقيان)</li>'+
+      '<li><span class="eq sm">x = (-4 ± 8) / 6</span></li>'+
+      '<li><span class="eq sm">x = 4/6 = 2/3</span> أو <span class="eq sm">x = -12/6 = -2</span></li>'+
+      '<li><b>بالتحليل:</b> <span class="eq sm">(3x - 2)(x + 2) = 0</span> → <span class="eq sm">x = 2/3</span> أو <span class="eq sm">x = -2</span></li></ol>'
+});
+
+Q({
+  id:17, topic:'quad', level:'hard',
+  ask:'حل المعادلة (الجذران غير نسبيين — اكتب الصيغة الدقيقة أو القيمة العشرية):',
+  eq:'x^2 - 4x - 1 = 0',
+  methods:['القانون العام','إكمال المربع'],
+  fields:[{key:'r1', label:'x1 ='},{key:'r2', label:'x2 ='}],
+  ans:[4.2360679775,-0.2360679775], unordered:true,
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>a = 1، b = -4، c = -1 → <span class="eq sm">Δ = 16 + 4 = 20</span></li>'+
+      '<li><span class="eq sm">x = (4 ± √20) / 2 = (4 ± 2√5) / 2</span></li>'+
+      '<li>إذن <span class="eq sm">x = 2 + √5 ≈ 4.236</span> أو <span class="eq sm">x = 2 - √5 ≈ -0.236</span></li>'+
+      '<li><b>بإكمال المربع:</b> <span class="eq sm">(x - 2)^2 - 4 - 1 = 0</span> → <span class="eq sm">(x - 2)^2 = 5</span> → <span class="eq sm">x = 2 ± √5</span></li></ol>'
+});
+
+/* ======================= الباب الثاني: المحددات وطرق كرامر ======================= */
+
+Q({
+  id:18, topic:'det', level:'medium',
+  ask:'احسب قيمة المحدد من الرتبة الثانية:',
+  eq:'| 7   -3 |\n| 4    5 |',
+  methods:['القاعدة أ11×أ22 − أ12×أ21','طريقة كرامر'],
+  fields:[{key:'d', label:'قيمة المحدد ='}],
+  ans:[47],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>المحدد من الرتبة الثانية = (حاصل ضرب عنصري القطر الرئيسي) − (حاصل ضرب عنصري القطر الثانوي).</li>'+
+      '<li><span class="eq sm">= (7)(5) - (-3)(4)</span></li>'+
+      '<li><span class="eq sm">= 35 + 12 = 47</span></li></ol>'
+});
+
+Q({
+  id:19, topic:'det', level:'medium',
+  ask:'إذا كانت المصفوفة A = [ [3, -1, 2] , [0, 5, 4] , [1, 2, 6] ] فأوجد <b>مرافق العنصر أ12</b> (Cofactor):',
+  eq:'A = |  3  -1   2 |\n    |  0   5   4 |\n    |  1   2   6 |',
+  methods:['طريقة المحيدد ثم إشارة المرافق','المفكوك بالمرفقات'],
+  fields:[{key:'c', label:'المرافق ='}],
+  ans:[4],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li><b>أولًا المحيدد:</b> نحذف صف العنصر (الصف الأول) وعموده (العمود الثاني)، فتبقى العناصر: الصف الأول (0 ، 4) والصف الثاني (1 ، 6).</li>'+
+      '<li><span class="eq sm">المحيدد = | 0  4 ; 1  6 | = (0)(6) - (4)(1) = -4</span></li>'+
+      '<li>إشارة المرافق <span class="eq sm">= (-1)^(n+m) = (-1)^(1+2) = -1</span></li>'+
+      '<li>إذن المرافق <span class="eq sm">= (-1) × (-4) = +4</span></li></ol>'
+});
+
+Q({
+  id:20, topic:'det', level:'medium',
+  ask:'حل النظام بطريقة كرامر (أوجد x و y):',
+  eq:'2x + y = 4      ,      x + 3y = 7',
+  methods:['طريقة كرامر','الحذف','التعويض'],
+  fields:[{key:'x', label:'x ='},{key:'y', label:'y ='}],
+  ans:[1,2],
+  sol:'<p class="solh">خطوات الحل (كرامر)</p><ol class="steps">'+
+      '<li>محدد المعاملات: <span class="eq sm">Δ = | 2  1 ; 1  3 | = 6 - 1 = 5</span> ≠ 0</li>'+
+      '<li>محدد x: نستبدل عمود x بعمود الثوابت: <span class="eq sm">Δx = | 4  1 ; 7  3 | = 12 - 7 = 5</span></li>'+
+      '<li>محدد y: <span class="eq sm">Δy = | 2  4 ; 1  7 | = 14 - 4 = 10</span></li>'+
+      '<li><span class="eq sm">x = Δx / Δ = 5/5 = 1</span> و <span class="eq sm">y = Δy / Δ = 10/5 = 2</span></li></ol>'
+});
+
+Q({
+  id:21, topic:'det', level:'medium',
+  ask:'احسب قيمة المحدد من الرتبة الثالثة بطريقة ساروس:',
+  eq:'| 1  2  3 |\n| 4  5  6 |\n| 7  8  9 |',
+  methods:['طريقة ساروس','الكرامر (المفكوك بالمرفقات)'],
+  fields:[{key:'d', label:'قيمة المحدد ='}],
+  ans:[0],
+  sol:'<p class="solh">خطوات الحل (ساروس)</p><ol class="steps">'+
+      '<li>مجموع حاصلات ضرب القطر الرئيسي: <span class="eq sm">(1)(5)(9) + (2)(6)(7) + (3)(4)(8) = 45 + 84 + 96 = 225</span></li>'+
+      '<li>مجموع حاصلات ضرب القطر الثانوي: <span class="eq sm">(3)(5)(7) + (1)(6)(8) + (2)(4)(9) = 105 + 48 + 72 = 225</span></li>'+
+      '<li><span class="eq sm">Δ = 225 - 225 = 0</span></li>'+
+      '<li>لاحظ أن الصفوف متناسبة (الصف الثالث = الصف الأول + الصف الثاني مضروبًا في ثابت) ولهذا المحدد يساوي صفرًا.</li></ol>'
+});
+
+Q({
+  id:22, topic:'det', level:'hard',
+  ask:'حل النظام الثلاثي بطريقة كرامر (أوجد x و y و z):',
+  eq:'x + 2y + 4z = 17\n2x + 3y + 5z = 23\n3x + 5y + 2z = 19',
+  methods:['طريقة كرامر','المفكوك بالمرفقات','الحذف'],
+  fields:[{key:'x', label:'x ='},{key:'y', label:'y ='},{key:'z', label:'z ='}],
+  ans:[1,2,3],
+  sol:'<p class="solh">خطوات الحل (كرامر)</p><ol class="steps">'+
+      '<li><b>محدد المعاملات:</b> <span class="eq sm">Δ = 1(6-25) - 2(4-15) + 4(10-9) = -19 + 22 + 4 = 7</span></li>'+
+      '<li><b>Δx</b> (نستبدل عمود x بعمود الثوابت 17، 23، 19): <span class="eq sm">= 17(6-25) - 2(46-95) + 4(115-57) = -323 + 98 + 232 = 7</span> → x = 7/7 = 1</li>'+
+      '<li><b>Δy:</b> <span class="eq sm">= 1(46-95) - 17(4-15) + 4(38-69) = -49 + 187 - 124 = 14</span> → y = 14/7 = 2</li>'+
+      '<li><b>Δz:</b> <span class="eq sm">= 1(57-115) - 2(38-69) + 17(10-9) = -58 + 62 + 17 = 21</span> → z = 21/7 = 3</li>'+
+      '<li>الحل: <span class="eq sm">(x , y , z) = (1 , 2 , 3)</span></li></ol>'
+});
+
+Q({
+  id:23, topic:'det', level:'hard',
+  ask:'حل النظام الثلاثي بالمحددات (أوجد x و y و z):',
+  eq:'x + y + z = 16\n2x + y = 10\n2x + y + z = 15',
+  methods:['طريقة كرامر','الحذف بين المعادلات أولًا'],
+  fields:[{key:'x', label:'x ='},{key:'y', label:'y ='},{key:'z', label:'z ='}],
+  ans:[-1,12,5],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li><b>طريقة سريعة:</b> بطرح المعادلة الأولى من الثالثة: <span class="eq sm">(2x+y+z) - (x+y+z) = 15 - 16</span> → <span class="eq sm">x = -1</span></li>'+
+      '<li>من المعادلة الثانية: <span class="eq sm">2(-1) + y = 10</span> → <span class="eq sm">y = 12</span></li>'+
+      '<li>من الأولى: <span class="eq sm">-1 + 12 + z = 16</span> → <span class="eq sm">z = 5</span></li>'+
+      '<li><b>بكرامر:</b> Δ = -1، Δx = 1 → x = -1، Δy = -12 → y = 12، Δz = -5 → z = 5</li>'+
+      '<li>الحل: <span class="eq sm">(x , y , z) = (-1 , 12 , 5)</span></li></ol>'
+});
+
+Q({
+  id:24, topic:'det', level:'hard',
+  ask:'<b>تطبيق إداري:</b> مصنع ينتج نوعين من الوحدات. القسم الأول يعمل مرتين على الوحدة الأولى ومرتين على الثانية فينتج 200 ساعة عمل، والقسم الثاني يعمل مرتين على الأولى وثلاث مرات على الثانية فينتج 250 ساعة. أوجد عدد الوحدات من كل نوع بالمحددات:',
+  eq:'2x + 2y = 200      ,      2x + 3y = 250',
+  methods:['طريقة كرامر','الحذف'],
+  fields:[{key:'x', label:'x الوحدة الأولى ='},{key:'y', label:'y الوحدة الثانية ='}],
+  ans:[50,50],
+  sol:'<p class="solh">خطوات الحل (كرامر)</p><ol class="steps">'+
+      '<li><span class="eq sm">Δ = | 2  2 ; 2  3 | = (2)(3) - (2)(2) = 2</span></li>'+
+      '<li><span class="eq sm">Δx = | 200  2 ; 250  3 | = (200)(3) - (2)(250) = 100</span> → <span class="eq sm">x = 100/2 = 50</span></li>'+
+      '<li><span class="eq sm">Δy = | 2  200 ; 2  250 | = (2)(250) - (200)(2) = 100</span> → <span class="eq sm">y = 100/2 = 50</span></li>'+
+      '<li>إذن عدد الوحدات المطلوب = 50 وحدة من النوع الأول و 50 وحدة من النوع الثاني.</li></ol>'
+});
+
+Q({
+  id:25, topic:'det', level:'hard',
+  ask:'<b>تطبيق إداري (توازن السوق):</b> دالة الطلب <span dir="ltr">Qd = 10 − p</span> ودالة العرض <span dir="ltr">Qs = −2 + 2p</span>. أوجد سعر التوازن p وكمية التوازن Q:',
+  eq:'10 - p = Q      ,      -2 + 2p = Q',
+  methods:['الحذف بعد إعادة الترتيب','طريقة كرامر'],
+  fields:[{key:'p', label:'p ='},{key:'q', label:'Q ='}],
+  ans:[4,6],
+  sol:'<p class="solh">خطوات الحل</p><ol class="steps">'+
+      '<li>عند التوازن: <span class="eq sm">Qd = Qs</span> → <span class="eq sm">10 - p = -2 + 2p</span></li>'+
+      '<li><span class="eq sm">10 + 2 = 2p + p</span> → <span class="eq sm">12 = 3p</span> → <span class="eq sm">p = 4</span></li>'+
+      '<li>نعوض عن السعر: <span class="eq sm">Q = 10 - 4 = 6</span> (وبالتحقق من العرض: <span class="eq sm">-2 + 8 = 6</span>)</li>'+
+      '<li><b>بالمحددات:</b> نرتب المعادلتين: <span class="eq sm">p + Q = 10</span> و <span class="eq sm">-2p + Q = -2</span> → Δ = 1+2 = 3، Δp = 12 → p = 4، ΔQ = 18 → Q = 6</li></ol>'
+});
+
+/* ============================================================
+   1) أدوات مساعدة
+   ============================================================ */
+var TOPICS = {
+  first:'معادلة من الدرجة الأولى',
+  system2:'معادلتان في مجهولين',
+  quad:'معادلة من الدرجة الثانية',
+  det:'المحددات وطرق كرامر'
+};
+function $(sel){ return document.querySelector(sel); }
+function $$(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+function esc(s){
+  return String(s==null?'':s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmtTime(sec){
+  sec = Math.max(0, Math.round(sec));
+  var m = Math.floor(sec/60), s = sec%60;
+  return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+}
+function fmt(n){
+  if(!isFinite(n)) return '—';
+  var r = Math.round(n);
+  if(Math.abs(n-r) < 1e-9) return String(r);
+  for(var d=1; d<=20; d++){
+    var num = n*d;
+    if(Math.abs(num-Math.round(num)) < 1e-9){
+      return (Math.round(n*1000)/1000) + '  (= ' + Math.round(num) + '/' + d + ')';
+    }
+  }
+  return String(Math.round(n*1000)/1000);
+}
+
+/* ============================================================
+   2) المصحّح الذكي: يقرأ أي صيغة رياضية صحيحة
+   يقبل: 22/5 أو 4.4 أو 4,4 | x = 5 | الأرقام العربية | √5 | 2+sqrt(5)
+          (4+sqrt(20))/2 | 1/2 | 0.67 | التقريب لخانتين
+   ============================================================ */
+function normalizeMath(input){
+  if(input == null) return '';
+  var s = String(input);
+  s = s.replace(/[٠-٩]/g, function(d){ return String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)); });
+  s = s.replace(/[۰-۹]/g, function(d){ return String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)); });
+  s = s.replace(/٫/g,'.').replace(/،/g,'').replace(/,(\d)/g,'.$1');
+  s = s.replace(/[−–—]/g,'-').replace(/[×⋅✕]/g,'*').replace(/[÷]/g,'/');
+  s = s.replace(/√/g,'sqrt').replace(/π/g,'pi').replace(/²/g,'^2').replace(/³/g,'^3');
+  s = s.replace(/\s+/g,'');
+  s = s.replace(/^[^\d\-+(.]{1,8}=/,'');
+  s = s.replace(/=/g,'');
+  return s;
+}
+function evalMath(input){
+  var s = normalizeMath(input);
+  if(!s) return NaN;
+  var toks = [], i = 0;
+  while(i < s.length){
+    var c = s[i];
+    if((c >= '0' && c <= '9') || c === '.'){
+      var j = i;
+      while(j < s.length && ((s[j] >= '0' && s[j] <= '9') || s[j] === '.')) j++;
+      var num = parseFloat(s.slice(i,j));
+      if(isNaN(num)) return NaN;
+      toks.push({t:'num', v:num}); i = j;
+    } else if(/[a-zA-Z]/.test(c)){
+      var k = i;
+      while(k < s.length && /[a-zA-Z]/.test(s[k])) k++;
+      toks.push({t:'name', v:s.slice(i,k).toLowerCase()}); i = k;
+    } else if('+-*/^()'.indexOf(c) >= 0){
+      toks.push({t:c}); i++;
+    } else {
+      return NaN;
+    }
+  }
+  var pos = 0;
+  function peek(){ return toks[pos]; }
+  function parseExpr(){
+    var v = parseTerm(), t;
+    while(peek() && ((peek().t === '+') || (peek().t === '-'))){
+      t = toks[pos++].t;
+      var r = parseTerm();
+      v = (t === '+') ? v + r : v - r;
+    }
+    return v;
+  }
+  function parseTerm(){
+    var v = parseFactor();
+    while(peek()){
+      var t = peek().t;
+      if(t === '*'){ pos++; v = v * parseFactor(); }
+      else if(t === '/'){ pos++; v = v / parseFactor(); }
+      else if(t === 'num' || t === 'name' || t === '('){ v = v * parseFactor(); }
+      else break;
+    }
+    return v;
+  }
+  function parseFactor(){
+    var v = parseUnary();
+    if(peek() && peek().t === '^'){ pos++; v = Math.pow(v, parseFactor()); }
+    return v;
+  }
+  function parseUnary(){
+    var t = peek();
+    if(!t) throw 'err';
+    if(t.t === '-'){ pos++; return -parseUnary(); }
+    if(t.t === '+'){ pos++; return parseUnary(); }
+    return parsePrimary();
+  }
+  function parsePrimary(){
+    var t = toks[pos];
+    if(!t) throw 'err';
+    if(t.t === 'num'){ pos++; return t.v; }
+    if(t.t === '('){
+      pos++;
+      var v = parseExpr();
+      if(!peek() || peek().t !== ')') throw 'err';
+      pos++;
+      return v;
+    }
+    if(t.t === 'name'){
+      var nm = t.v; pos++;
+      if(nm === 'pi') return Math.PI;
+      if(nm === 'e') return Math.E;
+      if(nm === 'sqrt' || nm === 'abs' || nm === 'ln' || nm === 'log'){
+        var arg;
+        if(peek() && peek().t === '('){
+          pos++;
+          arg = parseExpr();
+          if(!peek() || peek().t !== ')') throw 'err';
+          pos++;
+        } else {
+          arg = parseUnary();
+        }
+        if(nm === 'sqrt') return Math.sqrt(arg);
+        if(nm === 'abs') return Math.abs(arg);
+        if(nm === 'ln') return Math.log(arg);
+        return Math.log10(arg);
+      }
+      throw 'err';
+    }
+    throw 'err';
+  }
+  try{
+    var out = parseExpr();
+    if(pos !== toks.length) return NaN;
+    if(!isFinite(out)) return NaN;
+    return out;
+  } catch(e){
+    return NaN;
+  }
+}
+function nearly(a, b){
+  if(!isFinite(a) || !isFinite(b)) return false;
+  var tol = Math.max(0.005, Math.abs(b) * 1e-4);
+  return Math.abs(a - b) <= tol;
+}
+
+/* ============================================================
+   3) حالة الامتحان
+   ============================================================ */
+var KEY = 'math1_midterm_quiz_v1';
+var TOTAL_TIME = 75 * 60;
+var state = {
+  name:'', answers:{}, methods:{}, work:{},
+  submitted:false, startTime:0, remain:TOTAL_TIME, scored:null, elapsed:0
+};
+var timerId = null, timerHidden = false, lastRun = 0;
+
+function saveState(){
+  try{
+    localStorage.setItem(KEY, JSON.stringify({
+      name:state.name, answers:state.answers, methods:state.methods, work:state.work,
+      submitted:state.submitted, startTime:state.startTime, remain:state.remain,
+      scored:state.scored, elapsed:state.elapsed
+    }));
+  }catch(e){}
+}
+function loadState(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(!raw) return null;
+    var s = JSON.parse(raw);
+    if(!s || typeof s !== 'object') return null;
+    return s;
+  }catch(e){ return null; }
+}
+function clearState(){
+  try{ localStorage.removeItem(KEY); }catch(e){}
+}
+
+/* ============================================================
+   4) بناء الأسئلة على الصفحة
+   ============================================================ */
+function renderQuestions(){
+  var host = $('#questions');
+  host.innerHTML = '';
+  QUESTIONS.forEach(function(q){
+    var card = document.createElement('article');
+    card.className = 'qcard';
+    card.id = 'q' + q.id;
+    var lvl = (q.level === 'hard')
+      ? '<span class="badge h">مستوى صعب</span>'
+      : '<span class="badge m">مستوى متوسط</span>';
+    var html = ''
+      + '<div class="qhead"><span class="qnum">سؤال ' + q.id + '</span>' + lvl
+      + '<span class="badge topic">' + TOPICS[q.topic] + '</span>'
+      + '<span class="badge pts">1 درجة</span></div>'
+      + '<p class="qask">' + q.ask + '</p>'
+      + '<div class="eq">' + esc(q.eq).replace(/\n/g,'<br>') + '</div>'
+      + '<div class="methods"><span class="lbl">طريقة الحل التي تفضلها (اختيارية تمامًا — لن تؤثر على الدرجة):</span>'
+      + '<div class="chips">'
+      + q.methods.map(function(m){
+          return '<button type="button" class="chip" data-q="' + q.id + '" data-m="' + esc(m) + '">' + esc(m) + '</button>';
+        }).join('')
+      + '</div></div>'
+      + '<div class="answer">'
+      + q.fields.map(function(f){
+          return '<div class="field"><label>' + esc(f.label) + '</label>'
+            + '<input type="text" dir="ltr" autocomplete="off" spellcheck="false" '
+            + 'data-q="' + q.id + '" data-k="' + f.key + '" placeholder="اكتب الإجابة"></div>';
+        }).join('')
+      + '</div>'
+      + '<details class="workbox"><summary>تدوين خطوات الحل (اختياري — للمراجعة فقط)</summary>'
+      + '<textarea data-w="' + q.id + '" placeholder="اكتب خطوات حلّك هنا..."></textarea></details>';
+    card.innerHTML = html;
+    host.appendChild(card);
+  });
+}
+function renderNav(){
+  var nav = $('#navgrid');
+  nav.innerHTML = '';
+  QUESTIONS.forEach(function(q){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'navbtn';
+    b.setAttribute('data-nav', q.id);
+    b.textContent = q.id;
+    b.title = 'سؤال ' + q.id + ' — ' + TOPICS[q.topic];
+    nav.appendChild(b);
+  });
+}
+function questionOf(id){
+  for(var i=0;i<QUESTIONS.length;i++){ if(String(QUESTIONS[i].id) === String(id)) return QUESTIONS[i]; }
+  return null;
+}
+function isAnswered(q){
+  return q.fields.every(function(f){
+    var v = state.answers[q.id + '_' + f.key];
+    return v != null && String(v).trim() !== '';
+  });
+}
+function answeredCount(){
+  return QUESTIONS.filter(isAnswered).length;
+}
+function refreshProgress(){
+  var n = answeredCount();
+  $('#progressTxt').textContent = n + ' / ' + QUESTIONS.length + ' سؤالًا تمت الإجابة عنه';
+  $('#progressFill').style.width = (n / QUESTIONS.length * 100) + '%';
+  $$('#navgrid .navbtn').forEach(function(b){
+    var q = questionOf(b.getAttribute('data-nav'));
+    if(isAnswered(q)) b.classList.add('done'); else b.classList.remove('done');
+  });
+}
+function restoreUI(){
+  $$('#questions input[data-q]').forEach(function(inp){
+    var key = inp.getAttribute('data-q') + '_' + inp.getAttribute('data-k');
+    if(state.answers[key] != null) inp.value = state.answers[key];
+  });
+  $$('#questions textarea[data-w]').forEach(function(t){
+    var v = state.work[t.getAttribute('data-w')];
+    if(v != null) t.value = v;
+  });
+  $$('#questions .chip').forEach(function(ch){
+    var qid = ch.getAttribute('data-q');
+    if(state.methods[qid] === ch.getAttribute('data-m')) ch.classList.add('on');
+  });
+  refreshProgress();
+}
+
+/* ============================================================
+   5) المؤقّت
+   ============================================================ */
+function tick(){
+  if(!state.startTime) return;
+  var now = Date.now();
+  var delta = (now - lastRun) / 1000;
+  lastRun = now;
+  state.remain = Math.max(0, state.remain - delta);
+  var el = $('#timer');
+  el.textContent = fmtTime(state.remain);
+  if(state.remain <= 300) el.classList.add('low'); else el.classList.remove('low');
+  if(Math.floor(state.remain) % 15 === 0) saveState();
+  if(state.remain <= 0){
+    clearInterval(timerId); timerId = null;
+    window.alert('انتهى الوقت المحدد للامتحان — سيتم التسليم تلقائيًا.');
+    submitExam(true);
+  }
+}
+function startTimer(){
+  if(timerId) clearInterval(timerId);
+  lastRun = Date.now();
+  timerId = setInterval(tick, 1000);
+}
+
+/* ============================================================
+   6) التصحيح
+   ============================================================ */
+function gradeQuestion(q){
+  var raw = q.fields.map(function(f){
+    var v = state.answers[q.id + '_' + f.key];
+    return v == null ? '' : String(v).trim();
+  });
+  var vals = raw.map(function(r){ return evalMath(r); });
+  var filled = raw.filter(function(r){ return r !== ''; }).length;
+  var res = { q:q, raw:raw, vals:vals, filled:filled };
+
+  if(filled === 0){ res.status = 'blank'; return res; }
+
+  if(q.unordered){
+    var got = vals.filter(function(v){ return isFinite(v); });
+    var exp = q.ans.slice().sort(function(a,b){ return a-b; });
+    var mine = got.slice().sort(function(a,b){ return a-b; });
+    var ok = (mine.length === exp.length) && mine.every(function(v,k){ return nearly(v, exp[k]); });
+    res.status = ok ? 'ok' : 'wrong';
+    if(!ok && mine.length){
+      var hits = 0, used = [];
+      mine.forEach(function(v){
+        for(var k=0;k<exp.length;k++){
+          if(used.indexOf(k) < 0 && nearly(v, exp[k])){ used.push(k); hits++; break; }
+        }
+      });
+      res.partialHits = hits;
+    }
+    return res;
+  }
+
+  var good = 0, bad = 0;
+  for(var i=0;i<q.ans.length;i++){
+    if(isFinite(vals[i]) && nearly(vals[i], q.ans[i])) good++; else bad++;
+  }
+  res.status = (good === q.ans.length) ? 'ok' : (good > 0 ? 'partial' : 'wrong');
+  res.good = good;
+  return res;
+}
+function scoreAll(){
+  var results = QUESTIONS.map(gradeQuestion);
+  var score = results.filter(function(r){ return r.status === 'ok'; }).length;
+  var byTopic = {};
+  Object.keys(TOPICS).forEach(function(t){ byTopic[t] = {correct:0, total:0}; });
+  results.forEach(function(r){
+    var t = r.q.topic;
+    byTopic[t].total++;
+    if(r.status === 'ok') byTopic[t].correct++;
+  });
+  return { results:results, score:score, byTopic:byTopic };
+}
+
+/* ============================================================
+   7) عرض النتيجة
+   ============================================================ */
+function answerLine(r){
+  var q = r.q, out = [];
+  if(q.unordered){
+    var exp = q.ans.slice().sort(function(a,b){ return a-b; });
+    var lbls = q.fields.map(function(f){ return f.label; });
+    exp.forEach(function(v,i){ out.push((lbls[i] || ('قيمة ' + (i+1))) + ' ' + fmt(v)); });
+  } else {
+    q.fields.forEach(function(f,i){ out.push(f.label + ' ' + fmt(q.ans[i])); });
+  }
+  return out.join('   ،   ');
+}
+function userLine(r){
+  var out = [];
+  r.raw.forEach(function(v,i){
+    if(v !== '') out.push(r.q.fields[i].label + ' ' + v);
+  });
+  return out.length ? out.join('   ،   ') : 'لم تتم الإجابة';
+}
+function statusText(r){
+  if(r.status === 'ok') return '<span class="tag ok">صحيحة</span>';
+  if(r.status === 'blank') return '<span class="tag no">لم تتم الإجابة</span>';
+  if(r.status === 'partial' || (r.partialHits === 1)) return '<span class="tag no">غير مكتملة — بعض القيم صحيحة</span>';
+  return '<span class="tag no">خاطئة</span>';
+}
+function renderResults(onlyErrors){
+  var data = state.scored || scoreAll();
+  var score = data.score, total = QUESTIONS.length;
+  var pct = Math.round(score / total * 100);
+
+  $('#scoreBig').textContent = score;
+  $('#scoreOut').textContent = 'من ' + total;
+  $('#resPct').textContent = pct + '%';
+  $('#resName').textContent = state.name ? state.name : 'بدون اسم';
+  $('#resTime').textContent = fmtTime(state.elapsed) + ' من ' + fmtTime(TOTAL_TIME);
+  var C = 2 * Math.PI * 66;
+  $('#ringFill').setAttribute('stroke-dashoffset', String(C * (1 - score / total)));
+
+  var msg;
+  if(pct >= 90) msg = 'مستوى ممتاز — أنت جاهز للميدتيرم. راجع فقط الأسئلة التي أخطأت فيها لتثبيت الطريقة.';
+  else if(pct >= 75) msg = 'مستوى جيد جدًا — تحتاج مراجعة سريعة لبعض الطرق، خصوصًا مسائل المحددات بكرامر.';
+  else if(pct >= 60) msg = 'مستوى جيد — ركّز على الخطوات الأساسية: ترتيب المعادلة قبل الحل، وحساب Δx و Δy و Δz.';
+  else if(pct >= 40) msg = 'تحتاج مراجعة — ابدأ من معادلات الدرجة الأولى والمعادلتين في مجهولين ثم المحددات.';
+  else msg = 'تحتاج مراجعة شاملة للبابين — ذاكر أمثلة الكتاب خطوة بخطوة ثم أعد الامتحان.';
+  $('#resMsg').innerHTML = '<b>الدرجة: ' + score + ' / ' + total + ' (' + pct + '%)</b><br>' + msg;
+
+  var bars = '';
+  Object.keys(TOPICS).forEach(function(t){
+    var d = data.byTopic[t];
+    if(!d || !d.total) return;
+    var p = Math.round(d.correct / d.total * 100);
+    bars += '<div class="tbar"><div class="row"><span>' + TOPICS[t] + '</span><span>' + d.correct + ' / ' + d.total + ' (' + p + '%)</span></div>'
+          + '<div class="track"><div class="fill" style="width:' + p + '%"></div></div></div>';
+  });
+  $('#topicBars').innerHTML = bars;
+
+  var host = $('#review');
+  host.innerHTML = '<h2>' + (onlyErrors ? 'مراجعة الأسئلة الخطأ فقط (' + data.results.filter(function(r){ return r.status !== 'ok'; }).length + ')' : 'مراجعة شاملة مع خطوات الحل') + '</h2>';
+  data.results.forEach(function(r){
+    if(onlyErrors && r.status === 'ok') return;
+    var q = r.q;
+    var cls = (r.status === 'ok') ? 'rv ok' : 'rv no';
+    var lvl = (q.level === 'hard') ? '<span class="badge h">صعب</span>' : '<span class="badge m">متوسط</span>';
+    var chosen = state.methods[q.id] ? '<span class="badge topic">طريقتك: ' + esc(state.methods[q.id]) + '</span>' : '';
+    var work = state.work[q.id] ? '<div class="sol"><p class="solh">خطواتك المكتوبة</p><div style="white-space:pre-wrap;font-size:.88rem">' + esc(state.work[q.id]) + '</div></div>' : '';
+    var html = ''
+      + '<div class="rhead"><span class="qnum">سؤال ' + q.id + '</span>' + statusText(r) + lvl
+      + '<span class="badge topic">' + TOPICS[q.topic] + '</span>' + chosen + '</div>'
+      + '<p class="qask">' + q.ask + '</p>'
+      + '<div class="eq">' + esc(q.eq).replace(/\n/g,'<br>') + '</div>'
+      + '<div class="ua"><span>' + (r.status === 'ok' ? 'إجابتك (مقبولة):' : 'إجابتك:') + '</span>'
+      + '<span class="box">' + esc(userLine(r)) + '</span></div>'
+      + '<div><span class="tiny">الإجابة الصحيحة:</span><br><span class="ca">' + esc(answerLine(r)) + '</span></div>'
+      + work
+      + '<div class="sol">' + q.sol + '</div>';
+    var div = document.createElement('div');
+    div.className = cls;
+    div.innerHTML = html;
+    host.appendChild(div);
+  });
+
+  $$('#navgrid .navbtn').forEach(function(b){
+    var q = questionOf(b.getAttribute('data-nav'));
+    var r = data.results.filter(function(x){ return x.q.id === q.id; })[0];
+    b.classList.remove('done','cur');
+    b.classList.add(r && r.status === 'ok' ? 'right' : 'wrong');
+  });
+}
+
+/* ============================================================
+   8) الانتقال بين الشاشات والتسليم
+   ============================================================ */
+function showScreen(id){
+  $$('.screen').forEach(function(s){ s.classList.remove('active'); });
+  $('#' + id).classList.add('active');
+  window.scrollTo({ top:0, behavior:'auto' });
+}
+function startExam(resume){
+  state.submitted = false;
+  state.startTime = Date.now();
+  lastRun = Date.now();
+  if(!resume){
+    state.answers = {}; state.methods = {}; state.work = {};
+    state.remain = TOTAL_TIME; state.scored = null; state.elapsed = 0;
+    $$('#questions input[data-q]').forEach(function(i){ i.value = ''; });
+    $$('#questions textarea[data-w]').forEach(function(t){ t.value = ''; });
+    $$('#questions .chip').forEach(function(c){ c.classList.remove('on'); });
+  }
+  $('#timer').textContent = fmtTime(state.remain);
+  $('#timer').classList.remove('low');
+  $('#studentLabel').textContent = (state.name ? state.name + ' · ' : '') + 'رياضة 1 · الفصل الأول والثاني';
+  $('#navgrid').style.display = '';
+  showScreen('screen-exam');
+  refreshProgress();
+  startTimer();
+  saveState();
+}
+function submitExam(force){
+  var blanks = QUESTIONS.length - answeredCount();
+  if(!force && blanks > 0){
+    if(!window.confirm('لديك ' + blanks + ' سؤالًا بدون إجابة. هل تريد التسليم الآن؟')) return;
+  }
+  if(timerId){ clearInterval(timerId); timerId = null; }
+  state.elapsed = Math.min(TOTAL_TIME, TOTAL_TIME - Math.max(0, state.remain));
+  state.submitted = true;
+  state.scored = scoreAll();
+  saveState();
+  $('#navgrid').style.display = 'none';
+  showScreen('screen-result');
+  renderResults(false);
+}
+
+/* ============================================================
+   9) الأحداث
+   ============================================================ */
+function bindEvents(){
+  $('#btnStart').addEventListener('click', function(){
+    state.name = ($('#studentName').value || '').trim();
+    startExam(false);
+  });
+
+  $('#questions').addEventListener('input', function(e){
+    var t = e.target;
+    if(t.matches('input[data-q]')){
+      state.answers[t.getAttribute('data-q') + '_' + t.getAttribute('data-k')] = t.value;
+      refreshProgress();
+      saveState();
+    } else if(t.matches('textarea[data-w]')){
+      state.work[t.getAttribute('data-w')] = t.value;
+      saveState();
+    }
+  });
+
+  $('#questions').addEventListener('click', function(e){
+    var ch = e.target.closest('.chip');
+    if(!ch) return;
+    var qid = ch.getAttribute('data-q'), m = ch.getAttribute('data-m');
+    var wasOn = ch.classList.contains('on') && state.methods[qid] === m;
+    $$('#questions .chip[data-q="' + qid + '"]').forEach(function(c){ c.classList.remove('on'); });
+    if(wasOn){ delete state.methods[qid]; }
+    else { ch.classList.add('on'); state.methods[qid] = m; }
+    saveState();
+  });
+
+  $('#navgrid').addEventListener('click', function(e){
+    var b = e.target.closest('.navbtn');
+    if(!b) return;
+    var card = $('#q' + b.getAttribute('data-nav'));
+    if(card) card.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+
+  $('#btnSubmit').addEventListener('click', function(){ submitExam(false); });
+  $('#btnSubmitBottom').addEventListener('click', function(){ submitExam(false); });
+
+  $('#btnToggleTimer').addEventListener('click', function(){
+    timerHidden = !timerHidden;
+    $('#timer').style.visibility = timerHidden ? 'hidden' : 'visible';
+    this.textContent = timerHidden ? 'إظهار المؤقت' : 'إخفاء المؤقت';
+  });
+
+  $('#btnPrev').addEventListener('click', function(){ jump(-1); });
+  $('#btnNext').addEventListener('click', function(){ jump(1); });
+
+  $('#btnRetry').addEventListener('click', function(){
+    if(!window.confirm('سيتم حذف جميع إجاباتك وبدء امتحان جديد. هل أنت متأكد؟')) return;
+    clearState();
+    state.answers = {}; state.methods = {}; state.work = {};
+    state.remain = TOTAL_TIME; state.scored = null; state.elapsed = 0; state.submitted = false;
+    restoreUI();
+    var rp = $('#resumePanel'); if(rp) rp.remove();
+    showScreen('screen-start');
+  });
+
+  var errOnly = false;
+  $('#btnShowAllErrors').addEventListener('click', function(){
+    errOnly = !errOnly;
+    renderResults(errOnly);
+    this.textContent = errOnly ? 'عرض كل الأسئلة' : 'مراجعة الأسئلة الخطأ فقط';
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+
+  $('#btnPrint').addEventListener('click', function(){ window.print(); });
+
+  var ticking = false;
+  window.addEventListener('scroll', function(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      ticking = false;
+      var best = null, bestD = Infinity;
+      $$('#questions .qcard').forEach(function(c){
+        var d = Math.abs(c.getBoundingClientRect().top - 130);
+        if(d < bestD){ bestD = d; best = c; }
+      });
+      if(best){
+        var id = best.id.replace('q','');
+        $$('#navgrid .navbtn').forEach(function(b){ b.classList.remove('cur'); });
+        var nb = $('#navgrid .navbtn[data-nav="' + id + '"]');
+        if(nb) nb.classList.add('cur');
+        $('#bbCount').textContent = 'سؤال ' + id + ' من ' + QUESTIONS.length;
+      }
+    });
+  }, { passive:true });
+
+  window.addEventListener('beforeunload', function(){
+    if(!state.submitted) saveState();
+  });
+}
+function currentIndex(){
+  var txt = $('#bbCount').textContent || '';
+  var m = txt.match(/سؤال\s+(\d+)/);
+  return m ? parseInt(m[1], 10) : 1;
+}
+function jump(step){
+  var i = currentIndex() + step;
+  if(i < 1) i = 1;
+  if(i > QUESTIONS.length) i = QUESTIONS.length;
+  var card = $('#q' + i);
+  if(card) card.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ============================================================
+   10) التشغيل
+   ============================================================ */
+(function init(){
+  renderQuestions();
+  renderNav();
+  bindEvents();
+
+  var saved = loadState();
+  if(saved && saved.answers && Object.keys(saved.answers).length && !saved.submitted){
+    state.name = saved.name || '';
+    state.answers = saved.answers || {};
+    state.methods = saved.methods || {};
+    state.work = saved.work || {};
+    state.remain = (typeof saved.remain === 'number') ? saved.remain : TOTAL_TIME;
+    state.startTime = saved.startTime || 0;
+    $('#studentName').value = state.name;
+    restoreUI();
+    var panel = document.createElement('div');
+    panel.className = 'panel';
+    panel.id = 'resumePanel';
+    panel.innerHTML = '<h3>يوجد امتحان غير مكتمل</h3>'
+      + '<p style="font-size:.9rem;margin:4px 0 12px">عدد الأسئلة المجابة سابقًا: <b>' + answeredCount()
+      + '</b> من ' + QUESTIONS.length + ' — الوقت المتبقي: <b>' + fmtTime(state.remain) + '</b></p>'
+      + '<div class="endbar" style="padding:0">'
+      + '<button class="btn btn-primary" id="btnResume">متابعة الامتحان</button>'
+      + '<button class="btn btn-ghost" id="btnFresh">ابدأ من جديد</button></div>';
+    var wrap = $('#screen-start .start-wrap');
+    wrap.insertBefore(panel, $('#btnStart'));
+    $('#btnResume').addEventListener('click', function(){
+      state.name = ($('#studentName').value || state.name || '').trim();
+      startExam(true);
+    });
+    $('#btnFresh').addEventListener('click', function(){
+      clearState();
+      state.answers = {}; state.methods = {}; state.work = {};
+      state.remain = TOTAL_TIME; state.submitted = false;
+      restoreUI();
+      panel.remove();
+    });
+  } else {
+    restoreUI();
+  }
+})();
+</script>
+</body>
+</html>
